@@ -41,6 +41,11 @@ public class F_main extends javax.swing.JFrame {
         jMenu3.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
 
         jMenuItem2.setText("Tambah Menu");
+        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem2ActionPerformed(evt);
+            }
+        });
         jMenu3.add(jMenuItem2);
 
         jMenuItem3.setText("Order");
@@ -87,6 +92,11 @@ public class F_main extends javax.swing.JFrame {
         new FormUser();
         this.dispose();
     }//GEN-LAST:event_datauserActionPerformed
+
+    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
+        new FormMenu();
+        this.dispose();
+    }//GEN-LAST:event_jMenuItem2ActionPerformed
 
   
 
