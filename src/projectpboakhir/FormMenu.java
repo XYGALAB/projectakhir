@@ -13,12 +13,12 @@ Connection con = null;
   
 public void autokodeMakanan(){
     try {
-        String sql = "WHERE kode IN (SELECT MAX(kode) FROM tb_makanan)";
+        String sql = "SELECT * FROM tb_makanan order by kode desc";
             java.sql.Connection conn=(Connection)conek.configDB();
             java.sql.Statement stm=conn.createStatement();
             java.sql.ResultSet res=stm.executeQuery(sql);
     if (res.next()){
-        String kode = rs.getString("kode").substring(1);
+        String kode = res.getString("kode").substring(1);
         String AN = "" +(Integer.parseInt(kode) + 1);
         String Nol = "";
         
@@ -29,15 +29,40 @@ public void autokodeMakanan(){
         else if(AN.length()==3)
         {Nol = "";}
         
-        txtKode.setText("SBN" + Nol + AN);
+        txtKode.setText( Nol + AN);
     } else {
-        txtKode.setText("SBN001");
+        txtKode.setText("001");
     }
     }catch (Exception e) {
         JOptionPane.showMessageDialog(null, e);
     }
 }
-      
+public void autokodeMinuman(){
+    try {
+        String sql = "SELECT * FROM tb_minuman order by kode desc";
+            java.sql.Connection conn=(Connection)conek.configDB();
+            java.sql.Statement stm=conn.createStatement();
+            java.sql.ResultSet res=stm.executeQuery(sql);
+    if (res.next()){
+        String kode = res.getString("kode").substring(1);
+        String AN = "" +(Integer.parseInt(kode) + 1);
+        String Nol = "";
+        
+        if (AN.length()==1)
+        {Nol = "00";}
+        else if (AN.length()==2)
+        {Nol = "0";}
+        else if(AN.length()==3)
+        {Nol = "";}
+        
+        txtKode.setText( Nol + AN);
+    } else {
+        txtKode.setText("001");
+    }
+    }catch (Exception e) {
+        JOptionPane.showMessageDialog(null, e);
+    }
+}      
 private void load_tablemakanan(){
         // membuat tampilan model tabel
         DefaultTableModel model = new DefaultTableModel();
@@ -99,18 +124,22 @@ private void load_tableminuman(){
     txtKode.enable(false);
     txtNama.enable(false);
     txtHarga.enable(false);
-        txtKode.setText(null);
-        txtNama.setText(null);
-        txtHarga.setText(null);
+    txtKode.setText(null);
+    txtNama.setText(null);
+    txtHarga.setText(null);
+    btnSimpan.enable(false);
+    btnUpdate.enable(false);
+
     }
     
 private void clear(){
     txtKode.enable(false);
     txtNama.enable(true);
     txtHarga.enable(true);
-        txtKode.setText(null);
+        
         txtNama.setText(null);
         txtHarga.setText(null);
+        
 }
 public void prosesSimpan1(){
     try {
@@ -132,6 +161,58 @@ public void prosesSimpan2(){
             java.sql.PreparedStatement pst=conn.prepareStatement(sql);
             pst.execute();
             
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, e.getMessage());
+        }
+}
+public void prosesUpdate1(){
+    try {
+            int baris = tabel_menu.getSelectedRow();
+            String id =tabel_menu.getValueAt(baris, 1).toString();
+            String sql ="UPDATE `tb_makanan` SET `kode`='"+txtKode.getText()+"',`makanan`='"+txtNama.getText()+"',`harga`='"+txtHarga.getText()+"'WHERE id = '"+ id +"' ";
+            java.sql.Connection conn=(Connection)conek.configDB();
+            java.sql.PreparedStatement pst=conn.prepareStatement(sql);
+            pst.execute();
+            JOptionPane.showMessageDialog(null, "data berhasil di edit");
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Perubahan Data Gagal"+e.getMessage());
+        }
+}
+public void prosesUpdate2(){
+    try {
+            int baris = tabel_menu.getSelectedRow();
+            String id =tabel_menu.getValueAt(baris, 1).toString();
+            String sql ="UPDATE `tb_minuman` SET `kode`='"+txtKode.getText()+"',`minuman`='"+txtMakanan.getText()+"',`harga`='"+txtHarga.getText()+"'WHERE id = '"+ id +"' ";
+            java.sql.Connection conn=(Connection)conek.configDB();
+            java.sql.PreparedStatement pst=conn.prepareStatement(sql);
+            pst.execute();
+            JOptionPane.showMessageDialog(null, "data berhasil di edit");
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Perubahan Data Gagal"+e.getMessage());
+        }
+}
+public void prosesHapus1(){
+    try {
+            int baris = tabel_menu.getSelectedRow();
+            String id =tabel_menu.getValueAt(baris, 1).toString();
+            String sql ="delete from tb_makanan WHERE id = '"+ id +"'";
+            java.sql.Connection conn=(Connection)conek.configDB();
+            java.sql.PreparedStatement pst=conn.prepareStatement(sql);
+            pst.execute();
+            JOptionPane.showMessageDialog(this, "berhasil di hapus");
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, e.getMessage());
+        }
+}
+public void prosesHapus2(){
+    try {
+            int baris = tabel_menu.getSelectedRow();
+            String id =tabel_menu.getValueAt(baris, 1).toString();
+            String sql ="delete from tb_minuman WHERE id = '"+ id +"'";
+            java.sql.Connection conn=(Connection)conek.configDB();
+            java.sql.PreparedStatement pst=conn.prepareStatement(sql);
+            pst.execute();
+            JOptionPane.showMessageDialog(this, "berhasil di hapus");
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, e.getMessage());
         }
@@ -164,15 +245,14 @@ public void prosesSimpan2(){
         jScrollPane1 = new javax.swing.JScrollPane();
         tabel_menu = new javax.swing.JTable();
         btnUpdate = new javax.swing.JButton();
+        btnHapus = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         btnMakanan = new javax.swing.JMenu();
         btnTambah1 = new javax.swing.JMenuItem();
         btnEdit1 = new javax.swing.JMenuItem();
-        btnHapus1 = new javax.swing.JMenuItem();
         btnMinuman = new javax.swing.JMenu();
         btnTambah2 = new javax.swing.JMenuItem();
         btnEdit2 = new javax.swing.JMenuItem();
-        btnHapus2 = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -205,6 +285,7 @@ public void prosesSimpan2(){
         btnSimpan.setBackground(new java.awt.Color(255, 204, 204));
         btnSimpan.setForeground(new java.awt.Color(40, 70, 70));
         btnSimpan.setText("Simpan");
+        btnSimpan.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
         btnSimpan.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnSimpanActionPerformed(evt);
@@ -214,6 +295,12 @@ public void prosesSimpan2(){
         btnTutup.setBackground(new java.awt.Color(255, 204, 204));
         btnTutup.setForeground(new java.awt.Color(40, 70, 70));
         btnTutup.setText("Tutup");
+        btnTutup.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btnTutup.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnTutupActionPerformed(evt);
+            }
+        });
 
         tabel_menu.setBackground(new java.awt.Color(255, 204, 204));
         tabel_menu.setForeground(new java.awt.Color(40, 70, 70));
@@ -238,15 +325,32 @@ public void prosesSimpan2(){
         btnUpdate.setBackground(new java.awt.Color(255, 204, 204));
         btnUpdate.setForeground(new java.awt.Color(40, 70, 70));
         btnUpdate.setText("Update");
+        btnUpdate.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btnUpdate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUpdateActionPerformed(evt);
+            }
+        });
+
+        btnHapus.setBackground(new java.awt.Color(255, 204, 204));
+        btnHapus.setForeground(new java.awt.Color(40, 70, 70));
+        btnHapus.setText("Hapus");
+        btnHapus.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btnHapus.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnHapusActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(14, 14, 14)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(14, 14, 14)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                 .addGroup(jPanel1Layout.createSequentialGroup()
@@ -265,21 +369,19 @@ public void prosesSimpan2(){
                                 .addComponent(jLabel4)
                                 .addGap(18, 18, 18)
                                 .addComponent(txtMakanan, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(btnSimpan)
-                            .addComponent(btnUpdate)
-                            .addComponent(btnTutup, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 296, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(btnSimpan, javax.swing.GroupLayout.DEFAULT_SIZE, 82, Short.MAX_VALUE)
+                            .addComponent(btnUpdate, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btnTutup, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btnHapus, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(10, 10, 10)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel1)
@@ -291,18 +393,22 @@ public void prosesSimpan2(){
                         .addGap(6, 6, 6)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel3)
-                            .addComponent(txtHarga, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(jPanel1Layout.createSequentialGroup()
-                            .addComponent(btnSimpan)
-                            .addGap(30, 30, 30))
-                        .addComponent(btnUpdate, javax.swing.GroupLayout.Alignment.TRAILING)))
-                .addGap(23, 23, 23)
+                            .addComponent(txtHarga, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(23, 23, 23))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(btnSimpan)
+                                .addGap(30, 30, 30))
+                            .addComponent(btnUpdate, javax.swing.GroupLayout.Alignment.TRAILING))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnHapus)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)))
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtMakanan, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnTutup)
                     .addComponent(jLabel4))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 29, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 31, Short.MAX_VALUE)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -313,18 +419,8 @@ public void prosesSimpan2(){
                 btnMakananMouseClicked(evt);
             }
         });
-        btnMakanan.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnMakananActionPerformed(evt);
-            }
-        });
 
         btnTambah1.setText("Tambah");
-        btnTambah1.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                btnTambah1MouseClicked(evt);
-            }
-        });
         btnTambah1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnTambah1ActionPerformed(evt);
@@ -333,15 +429,12 @@ public void prosesSimpan2(){
         btnMakanan.add(btnTambah1);
 
         btnEdit1.setText("Edit");
-        btnMakanan.add(btnEdit1);
-
-        btnHapus1.setText("Hapus");
-        btnHapus1.addActionListener(new java.awt.event.ActionListener() {
+        btnEdit1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnHapus1ActionPerformed(evt);
+                btnEdit1ActionPerformed(evt);
             }
         });
-        btnMakanan.add(btnHapus1);
+        btnMakanan.add(btnEdit1);
 
         jMenuBar1.add(btnMakanan);
 
@@ -371,15 +464,12 @@ public void prosesSimpan2(){
         btnMinuman.add(btnTambah2);
 
         btnEdit2.setText("edit");
-        btnMinuman.add(btnEdit2);
-
-        btnHapus2.setText("Hapus");
-        btnHapus2.addActionListener(new java.awt.event.ActionListener() {
+        btnEdit2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnHapus2ActionPerformed(evt);
+                btnEdit2ActionPerformed(evt);
             }
         });
-        btnMinuman.add(btnHapus2);
+        btnMinuman.add(btnEdit2);
 
         jMenuBar1.add(btnMinuman);
 
@@ -397,85 +487,40 @@ public void prosesSimpan2(){
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
-
-    private void btnMakananActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMakananActionPerformed
-        
-    }//GEN-LAST:event_btnMakananActionPerformed
 
     private void btnMinumanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMinumanActionPerformed
         
     }//GEN-LAST:event_btnMinumanActionPerformed
-
-    private void btnHapus1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHapus1ActionPerformed
-        try {
-            int baris = tabel_menu.getSelectedRow();
-            String id =tabel_menu.getValueAt(baris, 1).toString();
-            String sql ="delete from tb_makanan WHERE id = '"+ id +"'";
-            java.sql.Connection conn=(Connection)conek.configDB();
-            java.sql.PreparedStatement pst=conn.prepareStatement(sql);
-            pst.execute();
-            JOptionPane.showMessageDialog(this, "berhasil di hapus");
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, e.getMessage());
-        }
-        load_tablemakanan();
-        kosong();
-    }//GEN-LAST:event_btnHapus1ActionPerformed
-
-    private void btnHapus2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHapus2ActionPerformed
-        try {
-            int baris = tabel_menu.getSelectedRow();
-            String id =tabel_menu.getValueAt(baris, 1).toString();
-            String sql ="delete from tb_minuman WHERE id = '"+ id +"'";
-            java.sql.Connection conn=(Connection)conek.configDB();
-            java.sql.PreparedStatement pst=conn.prepareStatement(sql);
-            pst.execute();
-            JOptionPane.showMessageDialog(this, "berhasil di hapus");
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, e.getMessage());
-        }
-        load_tableminuman();
-        kosong();
-    }//GEN-LAST:event_btnHapus2ActionPerformed
-
+ 
     private void btnSimpanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSimpanActionPerformed
         if (btnSimpan.getText() == "Simpan1"){
            prosesSimpan1();
            load_tablemakanan();
+           
         }else if (btnSimpan.getText() == "Simpan2"){
             prosesSimpan2();
             load_tableminuman();
-        }kosong();
+            
+        }
+        kosong();
     }//GEN-LAST:event_btnSimpanActionPerformed
-
-    private void btnMakananMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnMakananMouseClicked
-        load_tablemakanan();
-        
-        lebarKolom();
-    }//GEN-LAST:event_btnMakananMouseClicked
 
     private void btnMinumanMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnMinumanMouseClicked
         load_tableminuman();
-        
+        btnHapus.setText("Hapus2");
         lebarKolom();
     }//GEN-LAST:event_btnMinumanMouseClicked
-
-    private void btnTambah1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnTambah1MouseClicked
-        
-    }//GEN-LAST:event_btnTambah1MouseClicked
 
     private void btnTambah2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnTambah2MouseClicked
         
     }//GEN-LAST:event_btnTambah2MouseClicked
 
-    private void btnTambah1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTambah1ActionPerformed
-        btnSimpan.setText("Simpan1");
-        clear();
-    }//GEN-LAST:event_btnTambah1ActionPerformed
-
     private void btnTambah2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTambah2ActionPerformed
         btnSimpan.setText("Simpan2");
+        btnSimpan.enable(true);
+        autokodeMinuman();
         clear();
     }//GEN-LAST:event_btnTambah2ActionPerformed
 
@@ -488,6 +533,57 @@ public void prosesSimpan2(){
         String harga = tabel_menu.getValueAt(baris,4).toString();
         txtHarga.setText(harga);
     }//GEN-LAST:event_tabel_menuMouseClicked
+
+    private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
+        if (btnUpdate.getText() == "Update1"){
+           prosesUpdate1();
+           load_tablemakanan();
+        }else if (btnUpdate.getText() == "Update2"){
+            prosesUpdate2();
+            load_tableminuman();
+        }kosong();
+    }//GEN-LAST:event_btnUpdateActionPerformed
+
+    private void btnEdit2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEdit2ActionPerformed
+        btnUpdate.setText("Update2");
+        btnUpdate.enable(true);
+        clear();
+    }//GEN-LAST:event_btnEdit2ActionPerformed
+
+    private void btnHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHapusActionPerformed
+        if (btnHapus.getText() == "Hapus1"){
+           prosesHapus1();
+           load_tablemakanan();
+        }else if (btnHapus.getText() == "Hapus2"){
+            prosesHapus2();
+            load_tableminuman();
+        }kosong();
+    }//GEN-LAST:event_btnHapusActionPerformed
+
+    private void btnTambah1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTambah1ActionPerformed
+        btnSimpan.setText("Simpan1");
+        btnSimpan.enable(true);
+        autokodeMakanan();
+        clear();
+    }//GEN-LAST:event_btnTambah1ActionPerformed
+
+    private void btnEdit1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEdit1ActionPerformed
+        btnUpdate.setText("Update1");
+        btnUpdate.enable(true);
+        clear();
+    }//GEN-LAST:event_btnEdit1ActionPerformed
+
+    private void btnMakananMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnMakananMouseClicked
+       load_tablemakanan();
+        btnHapus.setText("Hapus1");
+        lebarKolom();
+        
+    }//GEN-LAST:event_btnMakananMouseClicked
+
+    private void btnTutupActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTutupActionPerformed
+        new F_main();
+        this.dispose();
+    }//GEN-LAST:event_btnTutupActionPerformed
     
    
  
@@ -495,8 +591,7 @@ public void prosesSimpan2(){
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem btnEdit1;
     private javax.swing.JMenuItem btnEdit2;
-    private javax.swing.JMenuItem btnHapus1;
-    private javax.swing.JMenuItem btnHapus2;
+    private javax.swing.JButton btnHapus;
     private javax.swing.JMenu btnMakanan;
     private javax.swing.JMenu btnMinuman;
     private javax.swing.JButton btnSimpan;
