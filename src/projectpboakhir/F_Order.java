@@ -431,10 +431,10 @@ public class F_Order extends javax.swing.JFrame {
     private void cmbMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbMenuActionPerformed
        if (cmbMenu.getSelectedItem() == "MAKANAN"){
            load_listmakanan();
-           btnSimpan.setText("Simpan1");
+          
        }else if (cmbMenu.getSelectedItem() == "MINUMAN"){
            load_listminuman();
-           btnSimpan.setText("Simpan2");
+           
        }btnAdd.setEnabled(true);
        load_table();
        lebarKolom();
