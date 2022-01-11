@@ -408,8 +408,8 @@ public void prosesHapus2(){
                     .addComponent(txtMakanan, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnTutup)
                     .addComponent(jLabel4))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 31, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 111, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -495,11 +495,11 @@ public void prosesHapus2(){
     }//GEN-LAST:event_btnMinumanActionPerformed
  
     private void btnSimpanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSimpanActionPerformed
-        if (btnSimpan.getText() == "Simpan1"){
+        if (btnSimpan.getName() == "Simpan1"){
            prosesSimpan1();
            load_tablemakanan();
            
-        }else if (btnSimpan.getText() == "Simpan2"){
+        }else if (btnSimpan.getName() == "Simpan2"){
             prosesSimpan2();
             load_tableminuman();
             
@@ -509,7 +509,7 @@ public void prosesHapus2(){
 
     private void btnMinumanMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnMinumanMouseClicked
         load_tableminuman();
-        btnHapus.setText("Hapus2");
+        btnHapus.setName("Hapus2");
         lebarKolom();
     }//GEN-LAST:event_btnMinumanMouseClicked
 
@@ -518,7 +518,7 @@ public void prosesHapus2(){
     }//GEN-LAST:event_btnTambah2MouseClicked
 
     private void btnTambah2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTambah2ActionPerformed
-        btnSimpan.setText("Simpan2");
+        btnSimpan.setName("Simpan2");
         btnSimpan.enable(true);
         autokodeMinuman();
         clear();
@@ -535,47 +535,47 @@ public void prosesHapus2(){
     }//GEN-LAST:event_tabel_menuMouseClicked
 
     private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
-        if (btnUpdate.getText() == "Update1"){
+        if (btnUpdate.getName() == "Update1"){
            prosesUpdate1();
            load_tablemakanan();
-        }else if (btnUpdate.getText() == "Update2"){
+        }else if (btnUpdate.getName() == "Update2"){
             prosesUpdate2();
             load_tableminuman();
         }kosong();
     }//GEN-LAST:event_btnUpdateActionPerformed
 
     private void btnEdit2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEdit2ActionPerformed
-        btnUpdate.setText("Update2");
+        btnUpdate.setName("Update2");
         btnUpdate.enable(true);
         clear();
     }//GEN-LAST:event_btnEdit2ActionPerformed
 
     private void btnHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHapusActionPerformed
-        if (btnHapus.getText() == "Hapus1"){
+        if (btnHapus.getName() == "Hapus1"){
            prosesHapus1();
            load_tablemakanan();
-        }else if (btnHapus.getText() == "Hapus2"){
+        }else if (btnHapus.getName() == "Hapus2"){
             prosesHapus2();
             load_tableminuman();
         }kosong();
     }//GEN-LAST:event_btnHapusActionPerformed
 
     private void btnTambah1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTambah1ActionPerformed
-        btnSimpan.setText("Simpan1");
+        btnSimpan.setName("Simpan1");
         btnSimpan.enable(true);
         autokodeMakanan();
         clear();
     }//GEN-LAST:event_btnTambah1ActionPerformed
 
     private void btnEdit1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEdit1ActionPerformed
-        btnUpdate.setText("Update1");
+        btnUpdate.setName("Update1");
         btnUpdate.enable(true);
         clear();
     }//GEN-LAST:event_btnEdit1ActionPerformed
 
     private void btnMakananMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnMakananMouseClicked
        load_tablemakanan();
-        btnHapus.setText("Hapus1");
+        btnHapus.setName("Hapus1");
         lebarKolom();
         
     }//GEN-LAST:event_btnMakananMouseClicked
